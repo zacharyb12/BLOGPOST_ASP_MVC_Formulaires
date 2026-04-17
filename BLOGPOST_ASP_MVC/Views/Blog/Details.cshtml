@@ -1,0 +1,17 @@
+﻿@model Blog
+
+
+
+
+
+ <h3 class="text-center">@Model.Title</h3>
+
+<div class="card w-75 mx-auto text-center">
+
+    <p>@Model.Id</p>
+    <p>@Model.Content</p>
+    <p>@Model.CreatedAt</p>
+    <p>@Model.UserId</p>
+    <a asp-controller="Blog" asp-action="Edit" asp-route-id="@Model.Id">Edit Blog</a>
+</div>
+

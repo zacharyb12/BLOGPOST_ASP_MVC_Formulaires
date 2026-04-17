@@ -1,0 +1,30 @@
+﻿
+@model UpdateBlogDTOs
+
+
+<form asp-action="Edit" method="post" class="w-75 mx-auto p-3 text-center card">
+
+    <div class="w-75 mx-auto p-2">
+        <label asp-for="Title" ></label>
+        <br />
+        <input type="text" asp-for="Title" class="w-75 mx-auto p-2 text-center" />
+        <br />
+        <span asp-validation-for="Title" class="text-danger" class="w-75 mx-auto p-2"></span>
+    </div>
+
+    <div class="w-75 mx-auto p-2">
+        <label asp-for="Content"></label>
+        <br />
+        <textarea type="text" asp-for="Content" class="w-75 mx-auto p-2 text-center"></textarea>
+        <br />
+        <span asp-validation-for="Content" class="text-danger  mx-auto p-2"></span>
+    </div>
+
+    <div>
+        <label asp-for="IsVisible"></label>
+        <input type="checkbox" asp-for="IsVisible" />
+    </div>
+
+    <input type="submit" value="Update" class="btn btn-outline-primary m-3 w-25 mx-auto" />
+
+</form>

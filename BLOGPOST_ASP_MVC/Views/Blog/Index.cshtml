@@ -1,0 +1,20 @@
+﻿@model List<Blog>
+
+
+<h1>Liste des blogs</h1>
+<a asp-controller="Blog" asp-action="Create">Create Blog</a>
+
+<div class="w-50 m-auto shadow rounded p-3 my-3">
+
+    @foreach(Blog b in Model)
+    {
+        <div class="card my-3">
+            <h5 class="text-center p-3">@b.Id - @b.Title</h5>
+            <div class="m-2 p-2 text-center w-75 mx-auto" >
+                <p>@b.Content</p>
+                <p>@b.UserId - @b.CreatedAt</p>
+                <a asp-controller="Blog" asp-action="Details" asp-route-id="@b.Id">Details</a>
+            </div>
+        </div>
+    }
+</div>

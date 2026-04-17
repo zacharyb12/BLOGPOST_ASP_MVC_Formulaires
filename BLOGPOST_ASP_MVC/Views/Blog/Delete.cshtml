@@ -1,0 +1,19 @@
+﻿@model Blog
+
+<h5>Etes-vous sur de vouloir supprimer cet élément : Blog @Model.Id</h5>
+
+
+<div class="p-3 bg-danger">
+    <div class="p-3 bg-light">
+        <h6>@Model.Title</h6>
+        <p>@Model.Content</p>
+        <p>@Model.CreatedAt</p>
+        <p>@Model.UserId</p>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="submit" value="Delete" asp-route-id="@Model.Id"/>
+</form>
+
+<a asp-controller="Blog" asp-action="Index">Retour à la liste</a>

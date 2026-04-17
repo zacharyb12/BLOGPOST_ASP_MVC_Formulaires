@@ -30,7 +30,8 @@ namespace BLOGPOST_ASP_MVC.Controllers
         // Index Action par défaut
         public IActionResult Index()
         {
-            return View(blogs);
+            List<Blog> listBlog = blogs.ToList();
+            return View(listBlog);
         }
 
         // Action Avec un paramètres récupérer automatiquement
@@ -117,6 +118,32 @@ namespace BLOGPOST_ASP_MVC.Controllers
             blogs[index].Title = updatedBlog.Title;
             blogs[index].Content = updatedBlog.Content;
             blogs[index].IsVisible = updatedBlog.IsVisible;
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            Blog? blog = blogs.FirstOrDefault(b => b.Id == id); 
+
+            if(blog == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(blog);  
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id, Blog blog)
+        {
+            if(id == -1)
+            {
+                return RedirectToAction("Index");
+            }
+
+            int index = blogs.FindIndex(b => b.Id == id);
+
+            blogs.RemoveAt(index);
 
             return RedirectToAction("Index");
         }

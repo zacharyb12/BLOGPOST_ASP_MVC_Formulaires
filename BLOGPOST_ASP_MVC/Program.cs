@@ -1,4 +1,5 @@
-
+using BLOGPOST_ASP_MVC.Data;
+using BLOGPOST_ASP_MVC.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace BLOGPOST_ASP_MVC
@@ -13,7 +14,12 @@ namespace BLOGPOST_ASP_MVC
             builder.Services.AddControllersWithViews();
 
             // Configuration Entity
+            builder.Services.AddDbContext<BlogContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("myConnection"))
+            );
 
+            // Injections de dépendances
+            builder.Services.AddScoped<IBlogRepository , BlogRepository>();
 
             var app = builder.Build();
 

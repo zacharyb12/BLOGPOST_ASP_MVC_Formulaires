@@ -1,45 +1,27 @@
 ﻿using BLOGPOST_ASP_MVC.Models;
+using BLOGPOST_ASP_MVC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace BLOGPOST_ASP_MVC.Controllers
 {
-    public class BlogController : Controller
+    public class BlogController(IBlogRepository _repository) : Controller
     {
-        public static List<Blog> blogs = new()
-        {
-            new Blog()
-            {
-                Id = 1,
-                Title = "Test",
-                Content = "Test",
-                CreatedAt = DateTime.Now,
-                IsVisible = true,
-                UserId = "A1"
-            },
-            new Blog()
-            {
-                Id = 2,
-                Title = "Test 2",
-                Content = "Test 2",
-                CreatedAt = DateTime.Now,
-                IsVisible = true,
-                UserId = "A2"
-            },
-        };
 
         // Index Action par défaut
         public async Task<IActionResult> Index()
         {
-            
+            IEnumerable<Blog> blogs = await _repository.GetBlogs(); 
 
-            return View();
+            return View(blogs);
         }
 
+
+
         // Action Avec un paramètres récupérer automatiquement
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            Blog? blog = blogs.FirstOrDefault(b => b.Id == id );
+            Blog? blog = await _repository.GetById(id);
 
             if(blog == null)
             {
@@ -57,97 +39,89 @@ namespace BLOGPOST_ASP_MVC.Controllers
 
         // traitement de la soumission du formulaire
         [HttpPost]
-        public IActionResult Create(CreateBlogDTOs newBlog)
+        public async Task<IActionResult> Create(CreateBlogDTOs newBlog)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 return View(newBlog);
             }
 
-            Blog blogToAdd = new()
+            bool response = await _repository.CreateBlog(newBlog);
+
+            if(!response)
             {
-                Id = blogs.Count() * 2,
-                Title = newBlog.Title,
-                Content = newBlog.Content,
-                IsVisible = newBlog.IsVisible,
-                CreatedAt = DateTime.Now,
-                UserId = "A12"
-            };
-
-            blogs.Add(blogToAdd);
-
+                return View(newBlog);
+            }
             return RedirectToAction("Index");
-            
         }
 
 
         // Modification d'un élément existant
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            Blog? blog = blogs.FirstOrDefault(b => b.Id == id);
+            Blog? blog = await _repository.GetById(id);
 
             if(blog == null)
             {
                 return RedirectToAction("Index");
             }
 
-            UpdateBlogDTOs blogToForm = new()
+            UpdateBlogDTOs blogToUpdate = new()
             {
                 Id = blog.Id,
                 Title = blog.Title,
                 Content = blog.Content,
-                IsVisible = blog.IsVisible,
+                IsVisible = blog.IsVisible
+
             };
 
-            return View(blogToForm);
+            return View(blogToUpdate);
         }
 
         [HttpPost]
-        public IActionResult Edit(UpdateBlogDTOs updatedBlog)
+        public async Task<IActionResult> Edit(UpdateBlogDTOs updatedBlog)
         {
             if(!ModelState.IsValid)
             {
                 return View(updatedBlog);
             }
 
-            int index = blogs.FindIndex(b => b.Id == updatedBlog.Id);
+            bool response = await _repository.UpdateBlog(updatedBlog.Id,updatedBlog);
 
-            if(index == -1)
+            if(!response)
             {
-                return RedirectToAction("Index");
+                return View(updatedBlog);
             }
-
-            blogs[index].Title = updatedBlog.Title;
-            blogs[index].Content = updatedBlog.Content;
-            blogs[index].IsVisible = updatedBlog.IsVisible;
-
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int id)
-        {
-            Blog? blog = blogs.FirstOrDefault(b => b.Id == id); 
 
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            Blog? blog = await _repository.GetById(id);
+            
             if(blog == null)
             {
                 return RedirectToAction("Index");
             }
+
             return View(blog);  
         }
 
         [HttpPost]
-        public IActionResult Delete(int id, Blog blog)
+        public async  Task<IActionResult> Delete(int id, Blog blog)
         {
-            if(id == -1)
+            bool response = await _repository.DeleteBlog(id);
+
+            if(!response)
             {
-                return RedirectToAction("Index");
+                return View(blog);
             }
-
-            int index = blogs.FindIndex(b => b.Id == id);
-
-            blogs.RemoveAt(index);
 
             return RedirectToAction("Index");
         }
+
+
     }
 }

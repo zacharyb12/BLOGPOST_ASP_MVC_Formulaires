@@ -1,10 +1,10 @@
 ﻿using BLOGPOST_ASP_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.BlogRepositories;
+
 
 namespace BLOGPOST_ASP_MVC.Controllers
 {
-    public class BlogController(IBlogRepository _repository) : Controller
+    public class BlogController : Controller
     {
         public static List<Blog> blogs = new()
         {
@@ -31,9 +31,9 @@ namespace BLOGPOST_ASP_MVC.Controllers
         // Index Action par défaut
         public async Task<IActionResult> Index()
         {
-            var listBlog = await _repository.GetBlogsAsync();
+            
 
-            return View(listBlog);
+            return View();
         }
 
         // Action Avec un paramètres récupérer automatiquement

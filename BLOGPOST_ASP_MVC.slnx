@@ -1,3 +1,6 @@
 <Solution>
+  <Folder Name="/Éléments de solution/">
+    <File Path="Tuto.md" />
+  </Folder>
   <Project Path="BLOGPOST_ASP_MVC/BLOGPOST_ASP_MVC.csproj" />
 </Solution>

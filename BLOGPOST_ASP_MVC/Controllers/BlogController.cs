@@ -72,7 +72,6 @@ namespace BLOGPOST_ASP_MVC.Controllers
                 Title = blog.Title,
                 Content = blog.Content,
                 IsVisible = blog.IsVisible
-
             };
 
             return View(blogToUpdate);
